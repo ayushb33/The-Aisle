@@ -4,7 +4,7 @@ import { ShoppingBag, Heart, ChevronRight, Star, Truck, ShieldCheck, ArrowLeft }
 import { motion, AnimatePresence } from 'framer-motion';
 import { MainLayout } from '@/components/layout/Layouts';
 import { PageTransition, FadeIn } from '@/components/animation/Transitions';
-import { Button, Skeleton, ErrorState } from '@/components/ui';
+import { Button, Skeleton, ErrorState, AddToWishlistModal } from '@/components/ui';
 import { useProduct } from '@/lib/queries';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
@@ -16,9 +16,10 @@ export function ProductPage() {
   const { data: product, isLoading, isError } = useProduct(slug || '');
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [showWishlistModal, setShowWishlistModal] = useState(false);
   const { addItem, isLoading: cartLoading } = useCartStore();
   const { isAuthenticated } = useAuthStore();
-  const { wishlists, addItem: addWishlistItem, removeItem: removeWishlistItem, isInWishlist } = useWishlistStore();
+  const { isInWishlist } = useWishlistStore();
 
   const isLiked = product ? isInWishlist(product.id) : false;
 
@@ -27,16 +28,9 @@ export function ProductPage() {
     await addItem(product.id, quantity);
   };
 
-  const handleToggleWishlist = async () => {
+  const handleToggleWishlist = () => {
     if (!isAuthenticated || !product) return;
-    const defaultWishlist = wishlists[0];
-    if (!defaultWishlist) return;
-
-    if (isLiked) {
-      await removeWishlistItem(defaultWishlist.id, product.id);
-    } else {
-      await addWishlistItem(defaultWishlist.id, product.id);
-    }
+    setShowWishlistModal(true);
   };
 
   if (isLoading) {
@@ -280,6 +274,12 @@ export function ProductPage() {
             <ProductReviews productId={product.id} slug={product.slug} />
           </div>
         </div>
+
+        <AddToWishlistModal
+          isOpen={showWishlistModal}
+          onClose={() => setShowWishlistModal(false)}
+          product={product}
+        />
       </PageTransition>
     </MainLayout>
   );

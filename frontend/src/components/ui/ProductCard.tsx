@@ -1,43 +1,41 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Product } from '@/lib/queries';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import { useWishlistStore } from '@/store/wishlistStore';
+import { AddToWishlistModal } from './AddToWishlistModal';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const navigate = useNavigate();
   const imageUrl = product.images?.[0]?.url || 'https://via.placeholder.com/400?text=No+Image';
   const price = parseFloat(product.price);
   const comparePrice = product.comparePrice ? parseFloat(product.comparePrice) : null;
   const discount = comparePrice ? Math.round(((comparePrice - price) / comparePrice) * 100) : 0;
   const { addItem, isLoading } = useCartStore();
   const { isAuthenticated } = useAuthStore();
-  const { wishlists, addItem: addWishlistItem, removeItem: removeWishlistItem, isInWishlist } = useWishlistStore();
+  const { isInWishlist } = useWishlistStore();
 
+  const [showWishlistModal, setShowWishlistModal] = useState(false);
   const isLiked = isInWishlist(product.id);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) return navigate('/login');
     await addItem(product.id);
   };
 
-  const handleToggleWishlist = async (e: React.MouseEvent) => {
+  const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isAuthenticated) return;
-    const defaultWishlist = wishlists[0];
-    if (!defaultWishlist) return;
-
-    if (isLiked) {
-      await removeWishlistItem(defaultWishlist.id, product.id);
-    } else {
-      await addWishlistItem(defaultWishlist.id, product.id);
-    }
+    e.stopPropagation();
+    if (!isAuthenticated) return navigate('/login');
+    setShowWishlistModal(true);
   };
 
   return (
@@ -155,6 +153,12 @@ export function ProductCard({ product }: ProductCardProps) {
           </motion.button>
         </div>
       </div>
+
+      <AddToWishlistModal
+        isOpen={showWishlistModal}
+        onClose={() => setShowWishlistModal(false)}
+        product={product}
+      />
     </motion.div>
   );
 }

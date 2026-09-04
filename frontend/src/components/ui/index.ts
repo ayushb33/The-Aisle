@@ -7,3 +7,4 @@ export { Modal } from './Modal';
 export { ProductCard } from './ProductCard';
 export { Skeleton, ProductCardSkeleton, PageLoader, Spinner } from './Loading';
 export { EmptyState, EmptyCart, EmptySearch, ErrorState } from './EmptyState';
+export { AddToWishlistModal } from './AddToWishlistModal';
