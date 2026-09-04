@@ -22,7 +22,7 @@ export function LoginPage() {
 
     try {
       const res = await api.post('/auth/login', { email, password });
-      setUser(res.data.data.user);
+      setUser(res.data.data.user, res.data.data.token);
       navigate('/account');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');

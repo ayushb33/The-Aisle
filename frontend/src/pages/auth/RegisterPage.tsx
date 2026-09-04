@@ -44,7 +44,7 @@ export function RegisterPage() {
 
     try {
       const res = await api.post('/auth/register', formData);
-      setUser(res.data.data.user);
+      setUser(res.data.data.user, res.data.data.token);
       navigate('/account');
     } catch (err: any) {
       if (err.response?.data?.errors) {

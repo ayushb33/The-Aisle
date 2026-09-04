@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, MapPin, Package, LogOut, ChevronRight, Plus, Trash2 } from 'lucide-react';
+import { User, MapPin, Package, LogOut, ChevronRight, Plus, Trash2, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MainLayout } from '@/components/layout/Layouts';
 import { PageTransition, FadeIn } from '@/components/animation/Transitions';
@@ -118,6 +118,17 @@ export function AccountPage() {
                     <ChevronRight className="w-4 h-4" />
                   </button>
                   
+                  {user.role === 'ADMIN' && (
+                    <Link
+                      to="/admin"
+                      className="w-full flex items-center justify-between p-3 rounded-xl bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 font-semibold transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Shield className="w-5 h-5 text-amber-400" /> Admin Dashboard
+                      </div>
+                      <ChevronRight className="w-4 h-4" />
+                    </Link>
+                  )}
                   <div className="pt-4 mt-4 border-t border-surface-800">
                     <button 
                       onClick={handleLogout}

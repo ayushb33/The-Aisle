@@ -19,7 +19,7 @@ interface AuthState {
   error: string | null;
   checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
-  setUser: (user: User) => void;
+  setUser: (user: User, token?: string) => void;
   updateProfile: (data: { firstName: string; lastName: string; phone?: string }) => Promise<void>;
 }
 
@@ -28,13 +28,19 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: true, // starts loading to check session on mount
   error: null,
-  setUser: (user) => set({ user, isAuthenticated: true, error: null }),
+  setUser: (user, token) => {
+    if (token) {
+      localStorage.setItem('aisle_token', token);
+    }
+    set({ user, isAuthenticated: true, error: null });
+  },
   checkAuth: async () => {
     try {
       set({ isLoading: true, error: null });
       const res = await api.get('/auth/me');
       set({ user: res.data.data.user, isAuthenticated: true, isLoading: false });
     } catch (error: any) {
+      localStorage.removeItem('aisle_token');
       set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },
@@ -44,6 +50,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (e) {
       console.error('Logout failed', e);
     } finally {
+      localStorage.removeItem('aisle_token');
       set({ user: null, isAuthenticated: false });
     }
   },

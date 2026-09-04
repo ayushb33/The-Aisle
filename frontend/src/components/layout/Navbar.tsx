@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Heart, Search, User, Menu, X, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Heart, Search, User, Menu, X, ChevronDown, Shield } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import FoldText from '@/components/ui/FoldText';
@@ -26,7 +26,7 @@ export function Navbar() {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const location = useLocation();
   const { cart } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const cartCount = cart.itemCount;
 
   // Close mobile menu on route change
@@ -183,6 +183,17 @@ export function Navbar() {
                   )}
                 </AnimatePresence>
               </NavLink>
+
+              {user?.role === 'ADMIN' && (
+                <NavLink
+                  to="/admin"
+                  className="p-2.5 rounded-xl text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors"
+                  aria-label="Admin Dashboard"
+                  title="Admin Dashboard"
+                >
+                  <Shield className="w-5 h-5" />
+                </NavLink>
+              )}
 
               <NavLink
                 to="/account"

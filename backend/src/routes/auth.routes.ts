@@ -55,7 +55,7 @@ router.post(
 
     sendSuccess(res, 201, {
       message: 'Registration successful',
-      data: { user },
+      data: { user, token },
     });
   })
 );
@@ -90,7 +90,7 @@ router.post(
 
     sendSuccess(res, 200, {
       message: 'Login successful',
-      data: { user: userWithoutPassword },
+      data: { user: userWithoutPassword, token },
     });
   })
 );

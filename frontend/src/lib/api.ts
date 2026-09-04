@@ -14,6 +14,15 @@ export const api = axios.create({
   },
 });
 
+// Request interceptor to attach Bearer token header (fallback for cross-site cookie blocking)
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('aisle_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Response interceptor to handle token expiry or unauthorized errors globally
 api.interceptors.response.use(
   (response) => response,
