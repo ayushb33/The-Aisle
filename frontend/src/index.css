@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+/* ─── Typography ─────────────────────────────────────────────────── */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* ─── Brand Palette ──────────────────────────────────── */
+  --color-brand-50:  #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-200: #fde68a;
+  --color-brand-300: #fcd34d;
+  --color-brand-400: #fbbf24;
+  --color-brand-500: #f59e0b;
+  --color-brand-600: #d97706;
+  --color-brand-700: #b45309;
+  --color-brand-800: #92400e;
+  --color-brand-900: #78350f;
+
+  /* ─── Surface Palette ────────────────────────────────── */
+  --color-surface-50:  #f8f8f9;
+  --color-surface-100: #f0f0f2;
+  --color-surface-200: #e0e0e4;
+  --color-surface-300: #c9c9cf;
+  --color-surface-400: #9595a0;
+  --color-surface-500: #6b6b78;
+  --color-surface-600: #4e4e5a;
+  --color-surface-700: #35353f;
+  --color-surface-800: #1e1e26;
+  --color-surface-850: #16161d;
+  --color-surface-900: #0f0f14;
+  --color-surface-950: #0a0a0f;
+}
+
+/* ─── Global Base ────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-surface-950 text-surface-100 antialiased;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white font-semibold tracking-tight leading-tight;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    @apply bg-brand-500 text-surface-950;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-surface-600;
+  }
+
+  /* Remove default button styles */
+  button {
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  img, video {
+    max-width: 100%;
+    display: block;
+  }
+
+  input, textarea, select {
+    font-family: inherit;
+  }
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────── */
+@layer utilities {
+  /* Container */
+  .container-app {
+    @apply max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Text Utilities */
+  .text-display {
+    font-family: var(--font-display);
+  }
+
+  /* Brand Gradient */
+  .gradient-brand {
+    @apply bg-gradient-to-r from-brand-400 to-brand-200;
+  }
+  .text-gradient-brand {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-brand-200;
+  }
+
+  /* Glass Surface */
+  .glass {
+    @apply bg-surface-800/60 backdrop-blur-md border border-surface-700/50;
+  }
+  .glass-light {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10;
+  }
+
+  /* Hover lift */
+  .hover-lift {
+    @apply transition-transform duration-200 ease-out hover:-translate-y-0.5;
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-950;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t border-surface-800;
+  }
+
+  /* Truncate lines */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    @apply bg-surface-800 animate-pulse rounded;
+  }
+
+  /* Dot separator */
+  .dot-sep::before {
+    content: '·';
+    @apply mx-2 text-surface-500;
+  }
+
+  /* Hide scrollbar but keep scroll */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Shimmer animation for skeletons */
+  @keyframes shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+
+  /* Glass card */
+  .card-glass {
+    @apply bg-surface-900/80 backdrop-blur-md border border-white/5 rounded-2xl;
+  }
+
+  /* Premium input */
+  .input-premium {
+    @apply w-full px-4 py-3 bg-surface-900 border border-surface-700 rounded-xl text-white placeholder:text-surface-500 focus:outline-none focus:border-brand-500/70 focus:ring-2 focus:ring-brand-500/10 transition-all;
+  }
+}
+
