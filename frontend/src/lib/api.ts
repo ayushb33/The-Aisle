@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // Base API URL (configurable via env variable for production deployment)
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const rawApiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').trim();
+const cleanUrl = rawApiUrl.replace(/\/+$/, '');
+export const API_URL = cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
 
 // Create an Axios instance with credentials (cookies) enabled
 export const api = axios.create({
